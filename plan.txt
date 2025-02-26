@@ -1,0 +1,31 @@
+Programming Project 5 - Plan
+(Milestone 1)
+
+Give your group information (2 person group is recommended).
+Isaac Nee and Freyia Tennebø
+A one paragraph summary of the program in your own words. What is being asked of you? What will you implement in this assignment? [5 points]
+We are going to be implementing Dijkstra’s shortest path algorithm in order to find the shortest paths in the graphs from the data we were given. The provided data comes from Project Sidewalk, which collects information about sidewalk conditions, such as obstacles. We will be working with a graph class - representing a graph in a list-style format - and complete the ShortestPath class to calculate the shortest routes based on accessibility scores. Our program will read graph data from the .txt files, process it with Dijkstra’s algorithm and then print out either the shortest distance to all reachable locations, or the shortest path between a starting point and an endpoint.
+Answer following questions: [10 points]
+
+- What is the purpose of each of the following HashMaps?
+       - Graph’s nodes field: store all the nodes in the graph, using a node ID as a key mapped to its corresponding value - or node object. Its purpose is to allow us to quickly and efficiently look up any node by its ID
+       - Node’s neighbors field: map a neighboring node ID to the edge weight value - representing the distance or accessibility score between the nodes. It should represent the outgoing edges from the current node, making it easy to retrieve connected nodes and their edge weights.
+       - Shortest Paths paths field: maps each node object (the key) to a PathData object (value). It will store the shortest known distance from the starting node to this node, and the previous node in the shortest path. The main purpose is to maintain the shortest path tree by storing distances and path data.
+
+- Where is the Graph’s adjacency list stored, how would you iterate over all edges leaving a given Node, and how would you get the weight of each edge? The list is stored in each Node objects neighbouring field as a HashMap
+For this project, instead of storing the adjacency list in the Graph class directly, each node object will have a “neighbor's” field which is a hash map. It is this hash map that acts as an adjacency list. The keys are the neighboring node objects and the values are the weights - or distances - of edges between the current node and its neighbors. To go through all the edges that start from a given node, we would need to loop through the neighbours HashMap. Within the for loop, get the neighbor - the node - through the key, and the weight from the value. To get the weight of a specific edge, you would do something like node.neighbors.get(neighborNode)
+
+- What are types of the Values (V) and Priorities (P) in the min-heap storing F?
+A min-heap is a data structure that will help us get the node with the smallest distance when we are implementing Dijkstra's algorithm. In this project, the values are the nodes representing locations in the graph and priorities are the shortest known distances (d-val) to each node - and this is a float. It works because the min-heap stores nodes as values and keeps them sorted by their distances. The node with the smallest distance will always be first, so we will be able to quickly and efficiently choose the next closest location.
+
+- For a given Node object, where are n.d and n.bp stored, and how would you access them?
+For this project, a node object won’t store shortest distance or backpointer directly, but rather in the HashMap paths inside the ShortestPathsClass. This HashMap links each node to a pathData object which holds d and bp. So to access them, you would do something like paths.get(node).d or .bp depending on what value you wanted to access.
+
+In 2-3 sentences, explain your thoughts on what you anticipate being the most challenging aspect(s) of the assignment.  [1 point]
+I think the hardest part of the project will be working with another person. You have to split up code, sometimes matching variables or relying on your partner finishing a function. I also think that we have to be very careful to understand the given code and assignment before we go and implement new data structures, so that everything fits together.
+
+A proposed schedule for when you will work on this assignment with your partner and where you will meet. (e.g., Mondays, Tuesdays, and Wednesdays from 5-7pm in the lab and Thursdays from 9am-2pm over Zoom). [1 point]
+	Tuesdays or Thursdays 6-8 either in the library or a nelson study room.
+
+A list of at least three different resources you plan to use if you get stuck on something. [1 point]
+If we get stuck, we will utilize office hours with either the professor or the TAs. If it is a quick fix then we can look it up on a website like GeeksforGeeks and add it to the collaborators section. Another idea for a quick fix would be asking another student what they did, not for their code but for an idea of how to get a solution for the problem.
