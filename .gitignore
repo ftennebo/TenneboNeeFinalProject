@@ -37,3 +37,4 @@ vcs.xml
 package-info.java
 /.idea/
 .DS_Store
+.gradle/
