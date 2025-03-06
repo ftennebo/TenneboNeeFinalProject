@@ -1,7 +1,5 @@
 package graph;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 
@@ -30,8 +28,45 @@ public class ShortestPaths {
         paths = new HashMap<Node,PathData>();
 
         // TODO 1: implement Dijkstra's algorithm to fill paths with
-        // testing if this comment comes through
         // shortest-path data for each Node reachable from origin.
+
+        // create a priority queue to store nodes while running Dijkstra's alg
+        // the queue will keep the node with the smallest known distance at the front, so we can process it first
+        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingDouble(n -> paths.get(n).distance)); // Comparator.comparingDouble() sorts nodes based on their shortest known distance
+
+        // Initialize distances
+        paths.put(origin, new PathData(0, null));
+        pq.add(origin);
+
+        // continue algorithm while priority queue contains elements
+        while (!pq.isEmpty()) {
+            Node current = pq.poll(); // get node with the smallest distance
+            double currentDistance = paths.get(current).distance;
+
+            // iterate through all the neighbors of the current node in the graph
+                // current.getNeighbors() gets a HashMap where the keys are the node objects, values are the edge weights
+                // entrySet() returns a set of key value pairs from the HashMap
+                // for loop iterates through each neighbor and its distance
+            for (Map.Entry<Node, Double> neighborEntry : current.getNeighbors().entrySet()) {
+                // checking if there's a shorter path to each neighbor
+                Node neighbor = neighborEntry.getKey(); // get the neighbor node
+                double edgeWeight = neighborEntry.getValue(); // get the edge weight (the distance)
+                double newDistance = currentDistance + edgeWeight;
+
+                // check if a shorter path to a neighboring node has been found,
+                // update when necessary:
+                if (newDistance < paths.get(neighbor).distance || !paths.containsKey(neighbor)){
+                    // !paths.containsKey(neighbor) -> paths is a HashMap storing shortest known distance to each node, and the prev node on the shortest path
+                    // so, if neighbor is not yet in paths, it means we haven't processed it yet, and we ust add it.
+                    // (newDistance < paths.get(neighbor).distance -> newDistance is calculated distance from neighbur to current node, paths.get(neighbor).distance is the previously recorded shortest distance to neighbor.
+                    // so, if newDistance is smaller, we have found a shorter route, need to update.
+                    paths.put(neighbor, new PathData(newDistance, current)); // update paths (HM) to store new shortest distance
+                    pq.add(neighbor); // add neighbor to the priority queue (which always sorts by shortest distance)
+                }
+
+            }
+
+        }
 
     }
 
