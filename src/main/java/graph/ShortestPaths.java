@@ -32,8 +32,9 @@ public class ShortestPaths {
 
         // create a priority queue to store nodes while running Dijkstra's alg
         // the queue will keep the node with the smallest known distance at the front, so we can process it first
-        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingDouble(n -> paths.get(n).distance)); // Comparator.comparingDouble() sorts nodes based on their shortest known distance
-
+        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingDouble(n ->
+                paths.getOrDefault(n, new PathData(Double.POSITIVE_INFINITY, null)).distance
+        ));
         // Initialize distances
         paths.put(origin, new PathData(0, null));
         pq.add(origin);
@@ -55,7 +56,7 @@ public class ShortestPaths {
 
                 // check if a shorter path to a neighboring node has been found,
                 // update when necessary:
-                if (newDistance < paths.get(neighbor).distance || !paths.containsKey(neighbor)){
+                if (!paths.containsKey(neighbor) || newDistance < paths.get(neighbor).distance) {
                     // !paths.containsKey(neighbor) -> paths is a HashMap storing shortest known distance to each node, and the prev node on the shortest path
                     // so, if neighbor is not yet in paths, it means we haven't processed it yet, and we ust add it.
                     // (newDistance < paths.get(neighbor).distance -> newDistance is calculated distance from neighbur to current node, paths.get(neighbor).distance is the previously recorded shortest distance to neighbor.
